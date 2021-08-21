@@ -7,13 +7,14 @@ import {IPlayer, Player} from "../Entity/Player/Player";
 export interface ILevel {
     getTile: (x: number, y: number) => IEntity
     getAllTiles: () => Array<Array<IEntity>>
+    player: IPlayer
 }
 
 export class Level implements ILevel {
     private readonly tiles: Array<Array<IEntity>>
-    private getPixiApp: () => Application
+    private readonly getPixiApp: () => Application
 
-    private player!: IPlayer
+    public player!: IPlayer
 
     constructor(getPixiApp: () => Application) {
         this.tiles = []

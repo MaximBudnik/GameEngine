@@ -62,6 +62,8 @@ export class GameEngine implements IGameEngine {
 
     private loop = () => {
         const tiles = this.Level.getAllTiles()
+        const player = this.Level.player
+        player.loopAction()
         for (let x = 0; x < tiles.length; x++) {
             for (let y = 0; y < tiles[x].length; y++) {
                 tiles[x][y].loopAction()

@@ -7,7 +7,7 @@ export interface IEntity {
     loopAction: () => void
 }
 
-export abstract class Entity implements IEntity {
+export class Entity implements IEntity {
     public readonly type: EntityEnum
     protected x: number
     protected y: number
@@ -15,9 +15,9 @@ export abstract class Entity implements IEntity {
     protected getAllTiles: () => Array<Array<IEntity>>
     protected spriteContainer!: Container
     protected sprite!: Sprite | AnimatedSprite
-    protected animationSpeed: number = 0.25
+    protected animationSpeed: number = 0.2
 
-    protected constructor(type: EntityEnum, x: number, y: number, getPixiApp: () => Application, getAllTiles: () => Array<Array<IEntity>>) {
+    constructor(type: EntityEnum, x: number, y: number, getPixiApp: () => Application, getAllTiles: () => Array<Array<IEntity>>) {
         this.type = type
         this.x = x
         this.y = y
@@ -27,25 +27,29 @@ export abstract class Entity implements IEntity {
 
     protected initialRender = (texture: Array<string> | string) => {
         const app: Application = this.getPixiApp()
-        let {x, y, spriteContainer, sprite} = this
-        spriteContainer = new Container();
-        spriteContainer.x = x * 16;
-        spriteContainer.y = y * 16;
-        app.stage.addChild(spriteContainer);
+        let {x, y} = this
+        this.spriteContainer = new Container();
+        this.spriteContainer.x = x * 16;
+        this.spriteContainer.y = y * 16;
+        app.stage.addChild(this.spriteContainer);
         if (Array.isArray(texture)) {
-            sprite = AnimatedSprite.fromFrames(texture)
-            if(sprite instanceof AnimatedSprite){
-                sprite.animationSpeed =this.animationSpeed
-                sprite.play()
+            this.sprite = AnimatedSprite.fromFrames(texture)
+            if(this.sprite instanceof AnimatedSprite){
+                this.sprite.animationSpeed =this.animationSpeed
+                this.sprite.play()
             }
         } else {
-            sprite = Sprite.from(texture);
+            this.sprite = Sprite.from(texture);
         }
-        spriteContainer.addChild(sprite);
+        this.spriteContainer.addChild(this.sprite);
     }
 
     loopAction = () => {
         //    To be implemented by child classes
+    }
+
+    protected idle = () =>{
+        //    To be implemented by child classes in specific cases
     }
 
 }

@@ -1,37 +1,58 @@
 import {Entity, IEntity} from "../Entity";
-import {Application, Loader, Texture,} from "pixi.js";
+import {Application, Texture} from "pixi.js";
 import {EntityEnum} from "../EntityEnum";
-import {PlayerKnightSpritesEnum} from "./Asset";
+import {playerKnightIdleTextureArray, playerKnightRunTextureArray} from "./Asset";
+import {ControlRegister, IControlRegister} from "./ControlRegister";
+import {keyBindings} from "../../../keyBindings";
+import {IMovableEntity, MoveMixin} from "../../Mixins/MoveMixin";
 
-export interface IPlayer {
+const {MOVE_RIGHT, MOVE_UP, MOVE_DOWN, MOVE_LEFT} = keyBindings
+
+export interface IPlayer extends IEntity, IMovableEntity {
 
 }
 
-export class Player extends Entity implements IPlayer {
+export class Player extends MoveMixin(Entity) implements IPlayer {
 
-    private playerKnightIdleTextureArray = [
-        PlayerKnightSpritesEnum.KNIGHT_IDLE_0,
-        PlayerKnightSpritesEnum.KNIGHT_IDLE_1,
-        PlayerKnightSpritesEnum.KNIGHT_IDLE_2,
-        PlayerKnightSpritesEnum.KNIGHT_IDLE_3,
-    ]
-
-    private playerKnightHitTextureArray = [
-        Texture.from(PlayerKnightSpritesEnum.KNIGHT_HIT),
-        Texture.from(PlayerKnightSpritesEnum.KNIGHT_IDLE_0),
-    ]
-
-    private playerKnightRunTextureArray = [
-        Texture.from(PlayerKnightSpritesEnum.KNIGHT_RUN_0),
-        Texture.from(PlayerKnightSpritesEnum.KNIGHT_RUN_1),
-        Texture.from(PlayerKnightSpritesEnum.KNIGHT_RUN_2),
-        Texture.from(PlayerKnightSpritesEnum.KNIGHT_RUN_3),
-    ]
+    private ControlRegister: IControlRegister
+    private taskQueue: Array<Function> = []
 
     constructor(x: number, y: number, getPixiApp: () => Application, getAllTiles: () => Array<Array<IEntity>>) {
         super(EntityEnum.Player, x, y, getPixiApp, getAllTiles)
-        this.initialRender(this.playerKnightIdleTextureArray)
+        this.initialRender(playerKnightIdleTextureArray)
+        this.ControlRegister = new ControlRegister()
+        this.ControlRegister.register()
+
+        this.runTextureArray = playerKnightRunTextureArray.map(e => Texture.from(e))
+        this.idleTextureArray = playerKnightIdleTextureArray.map(e => Texture.from(e))
     }
 
+    private processInput = () => {
+
+        const keySet = this.ControlRegister.keySet
+        this.processMovementInput(keySet)
+
+    }
+
+    private processMovementInput = (keySet: Set<string>) => {
+        let playerMoveDirection = {x: 0, y: 0}
+        if (keySet.has(MOVE_UP)) playerMoveDirection.y += -1
+        if (keySet.has(MOVE_LEFT)) playerMoveDirection.x += -1
+        if (keySet.has(MOVE_RIGHT)) playerMoveDirection.x += 1
+        if (keySet.has(MOVE_DOWN)) playerMoveDirection.y += 1
+        if (playerMoveDirection.x !== 0 || playerMoveDirection.y !== 0) {
+            this.taskQueue.push(() => this.move(playerMoveDirection))
+        }
+    }
+
+    loopAction = () => {
+        this.processInput()
+        const action = this.taskQueue.shift()
+        if (action) {
+            action()
+        } else {
+            this.idle()
+        }
+    }
 
 }

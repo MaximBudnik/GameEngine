@@ -4,3 +4,4 @@ export const settings = {
         size: 40
     }
 }
+

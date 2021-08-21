@@ -14,8 +14,6 @@ export enum PlayerKnightSpritesEnum {
 
 const getKnightAsset = AssetLoader.getEntityAssetUrl('player/knight')
 
-console.log(getKnightAsset('knight_f_hit_anim_f0.png'))
-
 const asset: Asset = [
     {name: PlayerKnightSpritesEnum.KNIGHT_HIT, url: getKnightAsset('knight_f_hit_anim_f0.png')},
     {name: PlayerKnightSpritesEnum.KNIGHT_IDLE_0, url: getKnightAsset('knight_f_idle_anim_f0.png')},
@@ -26,6 +24,25 @@ const asset: Asset = [
     {name: PlayerKnightSpritesEnum.KNIGHT_RUN_1, url: getKnightAsset('knight_f_run_anim_f1.png')},
     {name: PlayerKnightSpritesEnum.KNIGHT_RUN_2, url: getKnightAsset('knight_f_run_anim_f2.png')},
     {name: PlayerKnightSpritesEnum.KNIGHT_RUN_3, url: getKnightAsset('knight_f_run_anim_f3.png')},
+]
+
+export const playerKnightIdleTextureArray = [
+    PlayerKnightSpritesEnum.KNIGHT_IDLE_0,
+    PlayerKnightSpritesEnum.KNIGHT_IDLE_1,
+    PlayerKnightSpritesEnum.KNIGHT_IDLE_2,
+    PlayerKnightSpritesEnum.KNIGHT_IDLE_3,
+]
+
+export const playerKnightHitTextureArray = [
+    PlayerKnightSpritesEnum.KNIGHT_HIT,
+    PlayerKnightSpritesEnum.KNIGHT_IDLE_0,
+]
+
+export const playerKnightRunTextureArray = [
+    PlayerKnightSpritesEnum.KNIGHT_RUN_0,
+    PlayerKnightSpritesEnum.KNIGHT_RUN_1,
+    PlayerKnightSpritesEnum.KNIGHT_RUN_2,
+    PlayerKnightSpritesEnum.KNIGHT_RUN_3,
 ]
 
 AssetLoader.add(asset)
