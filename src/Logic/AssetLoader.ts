@@ -1,5 +1,5 @@
 import {CurriedFunction2, curry } from "lodash"
-import {Loader, LoaderResource} from "pixi.js"
+import {Loader, LoaderResource, SCALE_MODES, settings} from "pixi.js"
 
 
 export interface IAssetLoader {
@@ -18,6 +18,7 @@ class _AssetLoader implements IAssetLoader {
     private registeredAssets: Array<Asset> = []
 
     constructor() {
+      settings.SCALE_MODE = SCALE_MODES.NEAREST
     }
 
     setOnLoaderProgress = (fn: (loader: Loader, resource: LoaderResource) => void) => {
@@ -42,7 +43,7 @@ class _AssetLoader implements IAssetLoader {
         Loader.shared.load();
     }
 
-    getEntityAssetUrl = curry<string,string,string>((assetName: string,entityName:string) => `resources/images/entities/${entityName}/${assetName}`)
+    getEntityAssetUrl = curry<string,string,string>((entityName:string,assetName: string) => `resources/images/entities/${entityName}/${assetName}`)
 
 }
 

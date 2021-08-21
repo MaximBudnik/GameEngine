@@ -5,7 +5,8 @@ import {AssetLoader} from "./AssetLoader";
 
 export interface IGameEngine {
     startNewGame: () => void
-    loadResources: ()=>Promise<void>
+    pause: () => void
+    loadResources: () => Promise<void>
 }
 
 type status = 'play' | 'pause' | 'loading' | 'ready' | 'constructed'
@@ -16,16 +17,17 @@ export class GameEngine implements IGameEngine {
     private status: status
     private intervalId: number = 0
 
-    private Level: ILevel = new Level(() => this.pixiApp)
+    private getPixiApp = () => this.pixiApp
+
+    private Level!: ILevel;
 
     constructor() {
         this.status = 'constructed'
         this.pixiApp = new Application({
             view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
-            resolution: window.devicePixelRatio || 1,
-            backgroundColor: 0x6495ed,
-            width: window.innerWidth,
-            height: window.innerHeight,
+            resolution: (window.devicePixelRatio || 1)* 4,
+            resizeTo: window,
+            backgroundColor: 0x6495ed
         });
     }
 
@@ -47,19 +49,18 @@ export class GameEngine implements IGameEngine {
         if (this.status !== 'ready') {
             throw new Error('Engine is not ready')
         }
+        this.pixiApp.start()
         this.status = 'play'
-        this.Level = new Level(() => this.pixiApp)
+        this.Level = new Level(this.getPixiApp)
         this.intervalId = setInterval(this.loop, settings.loopInterval)
     }
 
-    private cancelLoopIfShould = () => {
-        if (this.status !== 'play') {
-            clearInterval(this.intervalId)
-        }
+    pause = () => {
+        this.status = 'pause'
+        clearInterval(this.intervalId)
     }
 
     private loop = () => {
-        this.cancelLoopIfShould()
         const tiles = this.Level.getAllTiles()
         for (let x = 0; x < tiles.length; x++) {
             for (let y = 0; y < tiles[x].length; y++) {
