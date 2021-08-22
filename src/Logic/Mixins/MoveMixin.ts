@@ -1,12 +1,12 @@
 import {AnimatedSprite, Texture} from "pixi.js";
 import {Entity} from "../Entity/Entity";
 
-export interface IMovableEntity {
+export interface IMoveMixin {
 
 }
 
 type Constructor<T> = new (...args: any[]) => T;
-export const MoveMixin = <T extends Constructor<Entity>>(SuperClass: T) => class extends SuperClass implements IMovableEntity {
+export const MoveMixin = <T extends Constructor<Entity>>(SuperClass: T) => class extends SuperClass implements IMoveMixin {
     protected speed = 2
     protected bothDirectionsMovementMultiplier = 0.75
     protected isMoving = false

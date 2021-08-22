@@ -12,6 +12,7 @@
     "vite": "^2.4.4"
   },
   "dependencies": {
+    "@pixi/tilemap": "^3.2.1",
     "@types/lodash": "^4.14.172",
     "lodash": "^4.17.21",
     "normalize.css": "^8.0.1",

@@ -12,6 +12,8 @@ export class Entity implements IEntity {
     protected x: number
     protected y: number
     protected getPixiApp: () => Application
+    protected getViewport = ()=> this.getPixiApp().stage.getChildAt(0) as Container
+    protected getScene = ()=> this.getViewport().getChildAt(0) as Container
     protected getAllTiles: () => Array<Array<IEntity>>
     protected spriteContainer!: Container
     protected sprite!: Sprite | AnimatedSprite
@@ -26,12 +28,12 @@ export class Entity implements IEntity {
     }
 
     protected initialRender = (texture: Array<string> | string) => {
-        const app: Application = this.getPixiApp()
-        let {x, y} = this
+        const scene = this.getScene()
+        const {x, y} = this
         this.spriteContainer = new Container();
         this.spriteContainer.x = x * 16;
         this.spriteContainer.y = y * 16;
-        app.stage.addChild(this.spriteContainer);
+        scene.addChild(this.spriteContainer);
         if (Array.isArray(texture)) {
             this.sprite = AnimatedSprite.fromFrames(texture)
             if(this.sprite instanceof AnimatedSprite){

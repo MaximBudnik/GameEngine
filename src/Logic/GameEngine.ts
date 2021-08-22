@@ -1,7 +1,8 @@
 import {settings} from "../settings";
 import {ILevel, Level} from "./Level/Level";
-import {Application} from "pixi.js";
+import {Application, Container} from "pixi.js";
 import {AssetLoader} from "./AssetLoader";
+import {CompositeTilemap} from "@pixi/tilemap";
 
 export interface IGameEngine {
     startNewGame: () => void
@@ -25,10 +26,26 @@ export class GameEngine implements IGameEngine {
         this.status = 'constructed'
         this.pixiApp = new Application({
             view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
-            resolution: (window.devicePixelRatio || 1)* 4,
+            resolution: (window.devicePixelRatio || 1) * 4,
             resizeTo: window,
             backgroundColor: 0x6495ed
         });
+
+        this.setViewport()
+    }
+
+    setViewport = () => {
+        const viewport = new Container()
+        const scene = new Container()
+        const baseEntityTileMap = new CompositeTilemap()
+
+        viewport.name = 'viewport'
+        scene.name = 'scene'
+        baseEntityTileMap.name = 'baseEntityTileMap'
+
+        viewport.addChild(scene)
+        scene.addChild(baseEntityTileMap)
+        this.pixiApp.stage.addChild(viewport)
     }
 
     loadResources = async () => {

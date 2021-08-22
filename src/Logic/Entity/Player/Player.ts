@@ -4,11 +4,11 @@ import {EntityEnum} from "../EntityEnum";
 import {playerKnightIdleTextureArray, playerKnightRunTextureArray} from "./Asset";
 import {ControlRegister, IControlRegister} from "./ControlRegister";
 import {keyBindings} from "../../../keyBindings";
-import {IMovableEntity, MoveMixin} from "../../Mixins/MoveMixin";
+import {IMoveMixin, MoveMixin} from "../../Mixins/MoveMixin";
 
 const {MOVE_RIGHT, MOVE_UP, MOVE_DOWN, MOVE_LEFT} = keyBindings
 
-export interface IPlayer extends IEntity, IMovableEntity {
+export interface IPlayer extends IEntity, IMoveMixin {
 
 }
 
