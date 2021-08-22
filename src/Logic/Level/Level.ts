@@ -3,6 +3,7 @@ import {IEntity} from "../Entity/Entity";
 import {Floor} from "../Entity/Base/Floor/Floor";
 import {Application} from "pixi.js";
 import {IPlayer, Player} from "../Entity/Player/Player";
+import {getRandomInRange} from "../../Helpers/random";
 
 export interface ILevel {
     getTile: (x: number, y: number) => IEntity
@@ -34,7 +35,8 @@ export class Level implements ILevel {
     }
 
     private createPlayer = () => {
-        this.player = new Player(5, 5, this.getPixiApp, this.getAllTiles)
+        const pos = getRandomInRange(0,settings.level.size)
+        this.player = new Player(pos, pos, this.getPixiApp, this.getAllTiles)
     }
 
     getTile = (x: number, y: number) => this.tiles[x][y]

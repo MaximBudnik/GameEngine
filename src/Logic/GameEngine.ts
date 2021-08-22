@@ -28,7 +28,7 @@ export class GameEngine implements IGameEngine {
             view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
             resolution: (window.devicePixelRatio || 1) * 2,
             resizeTo: window,
-            backgroundColor: 0x6495ed
+            backgroundColor: 0x6495ed,
         });
 
         this.setViewport()

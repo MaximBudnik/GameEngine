@@ -60,7 +60,7 @@ export class Player extends MoveMixin(Entity) implements IPlayer {
         if (keySet.has(MOVE_RIGHT)) playerMoveDirection.x += 1
         if (keySet.has(MOVE_DOWN)) playerMoveDirection.y += 1
         if (playerMoveDirection.x !== 0 || playerMoveDirection.y !== 0) {
-            console.log(this.x, this.y)
+            // console.log(this.x, this.y)
             this.taskQueue.push(() => this.move(playerMoveDirection))
         }
     }
@@ -81,17 +81,12 @@ export class Player extends MoveMixin(Entity) implements IPlayer {
         const scene = this.getScene()
         const app = this.getPixiApp()
         const renderer = app.renderer
-        var targetPivot = this.spriteContainer.position;
+        const targetPivot = this.spriteContainer.position;
         const delta = 0.075
 
         viewport.pivot.x = (targetPivot.x - viewport.pivot.x) * delta + viewport.pivot.x;
         viewport.pivot.y = (targetPivot.y - viewport.pivot.y) * delta + viewport.pivot.y;
 
-        const bounds: Rectangle = this.spriteContainer.getBounds()
-        if(bounds.y<0 || bounds.x <0){
-
-        }
-        console.log(bounds)
     }
 
 }
