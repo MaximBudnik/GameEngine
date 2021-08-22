@@ -1,7 +1,7 @@
 export const settings = {
     loopInterval: 50,
     level:{
-        size: 40
+        size: 100
     }
 }
 

@@ -26,7 +26,7 @@ export class GameEngine implements IGameEngine {
         this.status = 'constructed'
         this.pixiApp = new Application({
             view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
-            resolution: (window.devicePixelRatio || 1) * 4,
+            resolution: (window.devicePixelRatio || 1) * 2,
             resizeTo: window,
             backgroundColor: 0x6495ed
         });
