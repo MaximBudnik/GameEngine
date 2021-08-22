@@ -1,5 +1,5 @@
 import {Entity, IEntity} from "../Entity";
-import {Application, Rectangle, Texture} from "pixi.js";
+import {Application, Texture} from "pixi.js";
 import {EntityEnum} from "../EntityEnum";
 import {playerKnightIdleTextureArray, playerKnightRunTextureArray} from "./Asset";
 import {ControlRegister, IControlRegister} from "./ControlRegister";
@@ -25,25 +25,14 @@ export class Player extends MoveMixin(Entity) implements IPlayer {
 
         this.runTextureArray = playerKnightRunTextureArray.map(e => Texture.from(e))
         this.idleTextureArray = playerKnightIdleTextureArray.map(e => Texture.from(e))
-
         this.setupCamera()
     }
 
-    speed = 10
-
     private setupCamera = () => {
-        const app = this.getPixiApp()
-        const scene = this.getScene()
         const viewport = this.getViewport()
-        const renderer = app.renderer
 
-        viewport.position.set(renderer.screen.width / 2, renderer.screen.height / 2);
-        viewport.pivot.copyFrom(this.spriteContainer.position);
-
-        scene.x = viewport.pivot.x - renderer.screen.width / 2;
-        scene.y = viewport.pivot.y - renderer.screen.height / 2;
-        scene.width = renderer.screen.width;
-        scene.height = renderer.screen.height;
+        viewport.setZoom(3)
+        viewport.follow(this.spriteContainer, {acceleration:0.1, speed:2, radius:75})
     }
 
     private processInput = () => {
@@ -73,20 +62,6 @@ export class Player extends MoveMixin(Entity) implements IPlayer {
         } else {
             this.idle()
         }
-        this.camera()
-    }
-
-    private camera = () => {
-        const viewport = this.getViewport()
-        const scene = this.getScene()
-        const app = this.getPixiApp()
-        const renderer = app.renderer
-        const targetPivot = this.spriteContainer.position;
-        const delta = 0.075
-
-        viewport.pivot.x = (targetPivot.x - viewport.pivot.x) * delta + viewport.pivot.x;
-        viewport.pivot.y = (targetPivot.y - viewport.pivot.y) * delta + viewport.pivot.y;
-
     }
 
 }

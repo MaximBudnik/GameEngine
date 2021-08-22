@@ -1,5 +1,6 @@
 import {AnimatedSprite, Application, Container, Sprite} from "pixi.js";
 import {EntityEnum} from "./EntityEnum";
+import {Viewport} from "pixi-viewport";
 
 
 export interface IEntity {
@@ -12,7 +13,7 @@ export class Entity implements IEntity {
     protected x: number
     protected y: number
     protected getPixiApp: () => Application
-    protected getViewport = ()=> this.getPixiApp().stage.getChildAt(0) as Container
+    protected getViewport = ()=> this.getPixiApp().stage.getChildAt(0) as Viewport
     protected getScene = ()=> this.getViewport().getChildAt(0) as Container
     protected getAllTiles: () => Array<Array<IEntity>>
     protected spriteContainer!: Container
