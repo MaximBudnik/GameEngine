@@ -25,12 +25,12 @@ export class Player extends MoveMixin(Entity) implements IPlayer {
 
         this.runTextureArray = playerKnightRunTextureArray.map(e => Texture.from(e))
         this.idleTextureArray = playerKnightIdleTextureArray.map(e => Texture.from(e))
+
         this.setupCamera()
     }
 
     private setupCamera = () => {
         const viewport = this.getViewport()
-
         viewport.setZoom(3)
         viewport.follow(this.spriteContainer, {acceleration:0.1, speed:2, radius:75})
     }
@@ -49,7 +49,8 @@ export class Player extends MoveMixin(Entity) implements IPlayer {
         if (keySet.has(MOVE_RIGHT)) playerMoveDirection.x += 1
         if (keySet.has(MOVE_DOWN)) playerMoveDirection.y += 1
         if (playerMoveDirection.x !== 0 || playerMoveDirection.y !== 0) {
-            // console.log(this.x, this.y)
+            console.log(this.x, this.y)
+            console.log(this.spriteContainer.x, this.spriteContainer.y)
             this.taskQueue.push(() => this.move(playerMoveDirection))
         }
     }

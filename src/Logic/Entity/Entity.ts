@@ -45,6 +45,7 @@ export class Entity implements IEntity {
             this.sprite = Sprite.from(texture);
         }
         this.spriteContainer.addChild(this.sprite);
+        this.sprite.anchor.x = 0.5
     }
 
     loopAction = () => {

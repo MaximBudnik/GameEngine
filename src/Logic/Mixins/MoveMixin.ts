@@ -28,6 +28,10 @@ export const MoveMixin = <T extends Constructor<Entity>>(SuperClass: T) => class
             }
         }
 
+        if(moveDirection.x !== 0 && moveDirection.x !== this.spriteContainer.scale.x){
+            this.spriteContainer.scale.x = moveDirection.x
+        }
+
         const currentSpeed = moveDirection.x !== 0 && moveDirection.y !== 0 ? this.speed * this.bothDirectionsMovementMultiplier : this.speed
 
         const xMovement = moveDirection.x * currentSpeed
