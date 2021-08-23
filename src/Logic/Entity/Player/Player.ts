@@ -1,10 +1,11 @@
 import {Entity, IEntity} from "../Entity";
-import {Application, Graphics, Rectangle, Texture} from "pixi.js";
+import {Application, Texture} from "pixi.js";
 import {EntityEnum} from "../EntityEnum";
 import {playerKnightIdleTextureArray, playerKnightRunTextureArray} from "./Asset";
 import {ControlRegister, IControlRegister} from "./ControlRegister";
 import {keyBindings} from "../../../keyBindings";
 import {IMoveMixin, MoveMixin} from "../../Mixins/MoveMixin";
+import {SPRITE_SIZE} from "../../../constants";
 
 const {MOVE_RIGHT, MOVE_UP, MOVE_DOWN, MOVE_LEFT} = keyBindings
 
@@ -27,9 +28,10 @@ export class Player extends MoveMixin(Entity) implements IPlayer {
 
         this.runTextureArray = playerKnightRunTextureArray.map(e => Texture.from(e))
         this.idleTextureArray = playerKnightIdleTextureArray.map(e => Texture.from(e))
-        // this.sprite.anchor.x = 0.5
         this.setupCamera()
-        this.spriteContainer.y -= 16
+
+        //  CORRECTLY DISPLAY SPRITE
+        this.spriteContainer.y -= SPRITE_SIZE
     }
 
     private setupCamera = () => {

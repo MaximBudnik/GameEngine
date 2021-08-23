@@ -1,5 +1,6 @@
 import {AnimatedSprite, Texture} from "pixi.js";
 import {Entity} from "../Entity/Entity";
+import {SPRITE_SIZE} from "../../constants";
 
 export interface IMoveMixin {
 
@@ -19,8 +20,6 @@ export const MoveMixin = <T extends Constructor<Entity>>(SuperClass: T) => class
         x: number
         y: number
     }) => {
-
-
         if (!this.isMoving) {
             this.isMoving = true
             if (this.sprite instanceof AnimatedSprite) {
@@ -29,37 +28,51 @@ export const MoveMixin = <T extends Constructor<Entity>>(SuperClass: T) => class
             }
         }
 
+        if (moveDirection.x !== 0 && moveDirection.x !== this.spriteContainer.scale.x) {
+            this.spriteContainer.scale.x = moveDirection.x
+            this.sprite.position.x += moveDirection.x * SPRITE_SIZE
+        }
+
         const xMovement = moveDirection.x * this.speed
         const yMovement = moveDirection.y * this.speed
         const canMove = this.checkMove(xMovement, yMovement)
 
-        if (!canMove) return
+        if (canMove.canMoveX) {
+            this.x += xMovement
+            this.xIdx = Math.round(this.x / SPRITE_SIZE)
+            this.spriteContainer.x += xMovement
+        }
+        if (canMove.canMoveY) {
+            this.y += yMovement
+            this.yIdx = Math.round(this.y / SPRITE_SIZE)
+            this.spriteContainer.y += yMovement
+        }
 
-        this.x += xMovement
-        this.y += yMovement
-
-
-        this.spriteContainer.x += xMovement
-        this.spriteContainer.y += yMovement
     }
 
-    protected checkMove = (xMovement: number, yMovement: number): boolean => {
+    protected checkMove = (xMovement: number, yMovement: number): {
+        canMoveX: boolean
+        canMoveY: boolean
+    } => {
         const currentX = this.x
         const currentY = this.y
         const futureX = currentX + xMovement
         const futureY = currentY + yMovement
 
+        const xIdx = xMovement < 0 ? Math.floor(futureX / SPRITE_SIZE) : Math.ceil(futureX / SPRITE_SIZE)
+        const yIdx = yMovement < 0 ? Math.floor(futureY / SPRITE_SIZE) : Math.floor((futureY + 10) / SPRITE_SIZE)
 
-        console.log(futureX, futureY)
+        const xTile = this.getTile(xIdx, this.yIdx)
+        const yTile = this.getTile(this.xIdx, yIdx)
 
-        const xIdx = xMovement < 0 ? Math.floor(futureX / 16) : Math.ceil(futureX / 16)
-        const yIdx =  yMovement < 0 ? Math.floor(futureY / 16) : Math.floor((futureY+10) / 16)
-        console.log(xIdx, yIdx)
-        const tile = this.getTile(xIdx, yIdx)
+        const canMoveX = xTile?.canMove ?? false
+        const canMoveY = yTile?.canMove ?? false
 
-        const canMove = tile?.canMove ?? false
+        return {
+            canMoveX,
+            canMoveY
+        }
 
-        return canMove
     }
 
     protected idle = () => {

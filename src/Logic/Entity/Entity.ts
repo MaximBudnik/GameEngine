@@ -1,6 +1,7 @@
 import {AnimatedSprite, Application, Container, Sprite} from "pixi.js";
 import {EntityEnum} from "./EntityEnum";
 import {Viewport} from "pixi-viewport";
+import {SPRITE_SIZE} from "../../constants";
 
 
 export interface IEntity {
@@ -28,8 +29,8 @@ export class Entity implements IEntity {
         this.type = type
         this.xIdx = x
         this.yIdx = y
-        this.x = x*16
-        this.y = y*16
+        this.x = x*SPRITE_SIZE
+        this.y = y*SPRITE_SIZE
         this.getPixiApp = getPixiApp
         this.getAllTiles = getAllTiles
     }
