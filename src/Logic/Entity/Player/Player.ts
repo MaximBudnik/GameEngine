@@ -1,5 +1,5 @@
 import {Entity, IEntity} from "../Entity";
-import {Application, Texture} from "pixi.js";
+import {Application, Graphics, Rectangle, Texture} from "pixi.js";
 import {EntityEnum} from "../EntityEnum";
 import {playerKnightIdleTextureArray, playerKnightRunTextureArray} from "./Asset";
 import {ControlRegister, IControlRegister} from "./ControlRegister";
@@ -17,6 +17,8 @@ export class Player extends MoveMixin(Entity) implements IPlayer {
     private ControlRegister: IControlRegister
     private taskQueue: Array<Function> = []
 
+    speed = 2
+
     constructor(x: number, y: number, getPixiApp: () => Application, getAllTiles: () => Array<Array<IEntity>>) {
         super(EntityEnum.Player, x, y, getPixiApp, getAllTiles)
         this.initialRender(playerKnightIdleTextureArray)
@@ -25,14 +27,15 @@ export class Player extends MoveMixin(Entity) implements IPlayer {
 
         this.runTextureArray = playerKnightRunTextureArray.map(e => Texture.from(e))
         this.idleTextureArray = playerKnightIdleTextureArray.map(e => Texture.from(e))
-
+        // this.sprite.anchor.x = 0.5
         this.setupCamera()
+        this.spriteContainer.y -= 16
     }
 
     private setupCamera = () => {
         const viewport = this.getViewport()
         viewport.setZoom(3)
-        viewport.follow(this.spriteContainer, {acceleration:0.1, speed:2, radius:75})
+        viewport.follow(this.spriteContainer, {acceleration: 0.1, speed: 2, radius: 75})
     }
 
     private processInput = () => {
@@ -49,8 +52,6 @@ export class Player extends MoveMixin(Entity) implements IPlayer {
         if (keySet.has(MOVE_RIGHT)) playerMoveDirection.x += 1
         if (keySet.has(MOVE_DOWN)) playerMoveDirection.y += 1
         if (playerMoveDirection.x !== 0 || playerMoveDirection.y !== 0) {
-            console.log(this.x, this.y)
-            console.log(this.spriteContainer.x, this.spriteContainer.y)
             this.taskQueue.push(() => this.move(playerMoveDirection))
         }
     }

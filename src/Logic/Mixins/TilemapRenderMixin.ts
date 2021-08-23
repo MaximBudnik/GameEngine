@@ -16,7 +16,7 @@ export const TilemapRenderMixin = <T extends Constructor<Entity>>(SuperClass: T)
         if (Array.isArray(texture)) {
             //  TODO
         } else {
-            baseEntityTileMap.tile(Texture.from(texture), x * 16, y * 16)
+            baseEntityTileMap.tile(Texture.from(texture), x, y)
         }
     }
 

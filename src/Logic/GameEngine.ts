@@ -46,7 +46,9 @@ export class GameEngine implements IGameEngine {
             ticker: this.pixiApp.ticker,
             interaction: this.pixiApp.renderer.plugins.interaction
         })
-       
+        viewport.drag()
+            .pinch()
+            .wheel()
         const scene = new Container()
         const baseEntityTileMap = new CompositeTilemap()
 

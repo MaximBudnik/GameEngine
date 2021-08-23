@@ -7,8 +7,7 @@ export interface IMoveMixin {
 
 type Constructor<T> = new (...args: any[]) => T;
 export const MoveMixin = <T extends Constructor<Entity>>(SuperClass: T) => class extends SuperClass implements IMoveMixin {
-    protected speed = 2
-    protected bothDirectionsMovementMultiplier = 0.75
+    protected speed = 1
     protected isMoving = false
     private currentLoopToStop = 0
     private readonly loopsToStopMoving = 10
@@ -20,6 +19,8 @@ export const MoveMixin = <T extends Constructor<Entity>>(SuperClass: T) => class
         x: number
         y: number
     }) => {
+
+
         if (!this.isMoving) {
             this.isMoving = true
             if (this.sprite instanceof AnimatedSprite) {
@@ -28,20 +29,38 @@ export const MoveMixin = <T extends Constructor<Entity>>(SuperClass: T) => class
             }
         }
 
-        if(moveDirection.x !== 0 && moveDirection.x !== this.spriteContainer.scale.x){
-            this.spriteContainer.scale.x = moveDirection.x
-        }
+        const xMovement = moveDirection.x * this.speed
+        const yMovement = moveDirection.y * this.speed
+        const canMove = this.checkMove(xMovement, yMovement)
 
-        const currentSpeed = moveDirection.x !== 0 && moveDirection.y !== 0 ? this.speed * this.bothDirectionsMovementMultiplier : this.speed
+        if (!canMove) return
 
-        const xMovement = moveDirection.x * currentSpeed
-        const yMovement = moveDirection.y * currentSpeed
         this.x += xMovement
         this.y += yMovement
+
+
         this.spriteContainer.x += xMovement
         this.spriteContainer.y += yMovement
     }
 
+    protected checkMove = (xMovement: number, yMovement: number): boolean => {
+        const currentX = this.x
+        const currentY = this.y
+        const futureX = currentX + xMovement
+        const futureY = currentY + yMovement
+
+
+        console.log(futureX, futureY)
+
+        const xIdx = xMovement < 0 ? Math.floor(futureX / 16) : Math.ceil(futureX / 16)
+        const yIdx =  yMovement < 0 ? Math.floor(futureY / 16) : Math.floor((futureY+10) / 16)
+        console.log(xIdx, yIdx)
+        const tile = this.getTile(xIdx, yIdx)
+
+        const canMove = tile?.canMove ?? false
+
+        return canMove
+    }
 
     protected idle = () => {
         this.currentLoopToStop++
