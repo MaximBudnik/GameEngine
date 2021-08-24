@@ -9,6 +9,7 @@ export class Floor extends TilemapRenderMixin(Entity) {
 
     constructor(x: number, y: number, getPixiApp: () => Application, getAllTiles: () => Array<Array<IEntity>>) {
         super(EntityEnum.Floor, x, y, getPixiApp, getAllTiles)
+        this.tilemapName = 'floorTilemap'
         this.initialRender(getRandomFloorTexture())
     }
 

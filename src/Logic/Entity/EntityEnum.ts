@@ -1,4 +1,5 @@
 export enum EntityEnum {
     Player,
-    Floor
+    Floor,
+    Wall
 }

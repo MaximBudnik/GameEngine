@@ -3,7 +3,7 @@ import {ILevel, Level} from "./Level/Level";
 import {Application, Container} from "pixi.js";
 import {AssetLoader} from "./AssetLoader";
 import {CompositeTilemap} from "@pixi/tilemap";
-import { Viewport } from "pixi-viewport";
+import {Viewport} from "pixi-viewport";
 
 export interface IGameEngine {
     startNewGame: () => void
@@ -50,14 +50,17 @@ export class GameEngine implements IGameEngine {
             .pinch()
             .wheel()
         const scene = new Container()
-        const baseEntityTileMap = new CompositeTilemap()
+        const floorTilemap = new CompositeTilemap()
+        const wallTilemap = new CompositeTilemap()
 
         viewport.name = 'viewport'
         scene.name = 'scene'
-        baseEntityTileMap.name = 'baseEntityTileMap'
-
+        floorTilemap.name = 'floorTilemap'
+        wallTilemap.name = 'wallTilemap'
         viewport.addChild(scene)
-        scene.addChild(baseEntityTileMap)
+        scene.addChild(floorTilemap)
+        scene.addChild(wallTilemap)
+
         this.pixiApp.stage.addChild(viewport)
     }
 

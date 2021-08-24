@@ -29,7 +29,10 @@ export class Level implements ILevel {
         for (let x = 0; x < size; x++) {
             this.tiles[x] = []
             for (let y = 0; y < size; y++) {
-                if(x === y){
+                if(x === 0 || y ===0 ||x === size-1 || y ===size-1){
+                    this.tiles[x][y] = new Wall(x, y, this.getPixiApp, this.getAllTiles)
+                }
+                else if ((x %4 ===0 || y%4 ===0) && (x %2 !==0 || y%2 !==0)){
                     this.tiles[x][y] = new Wall(x, y, this.getPixiApp, this.getAllTiles)
                 }
                 else{
